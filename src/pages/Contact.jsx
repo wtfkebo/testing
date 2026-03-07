@@ -1,8 +1,42 @@
+import { useState } from 'react';
 import FadeUp from '../components/ui/FadeUp';
 import Button from '../components/ui/Button';
 import { Mail, Phone, MessageCircle } from 'lucide-react';
 
 const Contact = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(false);
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/wtfkebooo@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        setError(true);
+      }
+    } catch (err) {
+      setError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="w-full">
       <section className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
@@ -43,53 +77,75 @@ const Contact = () => {
           <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-black/5 shadow-xl shadow-black/[0.02]">
             <FadeUp delay={0.3}>
               <h3 className="text-2xl font-heading font-medium mb-8">Send us a message</h3>
-              <form action="https://formsubmit.co/hubthreefold@gmail.com" method="POST" className="flex flex-col gap-6">
-                {/* Honeypot to prevent spam */}
-                <input type="text" name="_honey" style={{ display: 'none' }} />
-                
-                {/* Disable captcha for seamless experience (optional, but requested by some) */}
-                <input type="hidden" name="_captcha" value="false" />
+              {isSubmitted ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center h-[400px] animate-in fade-in duration-500">
+                  <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-8 border-4 border-white shadow-lg">
+                    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h4 className="text-3xl font-heading font-medium mb-4 text-primary">Message Sent!</h4>
+                  <p className="text-gray-500 font-light max-w-sm text-lg">
+                    Thank you for reaching out safely. Our team will get back to you shortly.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                  {/* Honeypot to prevent spam */}
+                  <input type="text" name="_honey" style={{ display: 'none' }} />
+                  
+                  {/* Disable captcha for seamless experience (optional, but requested by some) */}
+                  <input type="hidden" name="_captcha" value="false" />
 
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="text-sm font-medium text-gray-600">Name</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    name="name"
-                    required
-                    className="w-full bg-[var(--color-bg-base)] border border-transparent focus:border-black/20 focus:bg-white rounded-xl px-4 py-4 outline-none transition-all"
-                    placeholder="Name"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="text-sm font-medium text-gray-600">Email</label>
-                  <input 
-                    type="email" 
-                    id="email"
-                    name="email" 
-                    required
-                    className="w-full bg-[var(--color-bg-base)] border border-transparent focus:border-black/20 focus:bg-white rounded-xl px-4 py-4 outline-none transition-all"
-                    placeholder="example@email.com"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="text-sm font-medium text-gray-600">Message</label>
-                  <textarea 
-                    id="message" 
-                    name="message"
-                    required
-                    rows={4}
-                    className="w-full bg-[var(--color-bg-base)] border border-transparent focus:border-black/20 focus:bg-white rounded-xl px-4 py-4 outline-none transition-all resize-none"
-                    placeholder="Tell us about your business..."
-                  />
-                </div>
-                {/* Redirect back to contact page after submission */}
-                <input type="hidden" name="_next" value="https://three-fold-hub.vercel.app/contact" />
-                
-                <button type="submit" className="w-full mt-4 px-6 py-4 bg-primary text-white text-sm font-medium rounded-full hover:bg-primary/90 transition-colors hover-lift">
-                  Send Message
-                </button>
-              </form>
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="name" className="text-sm font-medium text-gray-600">Name</label>
+                    <input 
+                      type="text" 
+                      id="name" 
+                      name="name"
+                      required
+                      className="w-full bg-[var(--color-bg-base)] border border-transparent focus:border-black/20 focus:bg-white rounded-xl px-4 py-4 outline-none transition-all"
+                      placeholder="Name"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="email" className="text-sm font-medium text-gray-600">Email</label>
+                    <input 
+                      type="email" 
+                      id="email"
+                      name="email" 
+                      required
+                      className="w-full bg-[var(--color-bg-base)] border border-transparent focus:border-black/20 focus:bg-white rounded-xl px-4 py-4 outline-none transition-all"
+                      placeholder="example@email.com"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="message" className="text-sm font-medium text-gray-600">Message</label>
+                    <textarea 
+                      id="message" 
+                      name="message"
+                      required
+                      rows={4}
+                      className="w-full bg-[var(--color-bg-base)] border border-transparent focus:border-black/20 focus:bg-white rounded-xl px-4 py-4 outline-none transition-all resize-none"
+                      placeholder="Tell us about your business..."
+                    />
+                  </div>
+                  
+                  {error && (
+                    <div className="text-red-500 text-sm mt-2">
+                      An error occurred while sending your message. Please try again.
+                    </div>
+                  )}
+
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full mt-4 px-6 py-4 bg-primary text-white text-sm font-medium rounded-full hover:bg-primary/90 transition-colors hover-lift disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </button>
+                </form>
+              )}
             </FadeUp>
           </div>
 
