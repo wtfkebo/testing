@@ -84,7 +84,7 @@ const Contact = () => {
                   />
                 </div>
                 {/* Redirect back to contact page after submission */}
-                <input type="hidden" name="_next" value="/contact" />
+                <input type="hidden" name="_next" value="https://three-fold-hub.vercel.app/contact" />
                 
                 <button type="submit" className="w-full mt-4 px-6 py-4 bg-primary text-white text-sm font-medium rounded-full hover:bg-primary/90 transition-colors hover-lift">
                   Send Message
