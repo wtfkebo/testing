@@ -3,7 +3,8 @@
 import * as React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SquareArrowOutUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import { cn } from "../../lib/utils";
 
 import { GlowingEffect } from "./glowing-effect";
@@ -206,6 +207,22 @@ export function CardStack<T extends CardStackItem>({
     next,
   ]);
 
+  const navigate = useNavigate();
+
+  const onCardClick = (i: number, item: T) => {
+    if (i === active) {
+      if (item.href) {
+        if (item.href.startsWith("http")) {
+          window.open(item.href, "_blank", "noreferrer");
+        } else {
+          navigate(item.href);
+        }
+      }
+    } else {
+      setActive(i);
+    }
+  };
+
   if (!len) return null;
 
   const activeItem = items[active]!;
@@ -214,7 +231,6 @@ export function CardStack<T extends CardStackItem>({
     <div
       ref={containerRef}
       className={cn("w-full transition-all duration-300", className)}
-
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
@@ -222,7 +238,6 @@ export function CardStack<T extends CardStackItem>({
       <div
         className="relative w-full"
         style={{ height: cardHeight + (isMobile ? 30 : 60) }}
-
         tabIndex={0}
         onKeyDown={onKeyDown}
       >
@@ -295,7 +310,7 @@ export function CardStack<T extends CardStackItem>({
                     "absolute bottom-0 rounded-2xl border-4 border-black/10 dark:border-white/10 overflow-hidden shadow-xl",
                     "will-change-transform select-none",
                     isActive
-                      ? "cursor-grab active:cursor-grabbing"
+                      ? "cursor-pointer active:scale-95 transition-transform"
                       : "cursor-pointer transition-opacity duration-300",
                     !isActive && "opacity-60 hover:opacity-100",
                   )}
@@ -330,7 +345,7 @@ export function CardStack<T extends CardStackItem>({
                     stiffness: springStiffness,
                     damping: springDamping,
                   }}
-                  onClick={() => setActive(i)}
+                  onClick={() => onCardClick(i, item)}
                   {...dragProps}
                 >
                   <div
@@ -374,18 +389,10 @@ export function CardStack<T extends CardStackItem>({
               );
             })}
           </div>
-          {activeItem.href ? (
-            <Link
-              to={activeItem.href}
-              className="ml-4 p-2 bg-primary/5 hover:bg-primary/10 rounded-full text-primary transition-colors"
-              aria-label="Open link"
-            >
-              <SquareArrowOutUpRight className="h-4 w-4" />
-            </Link>
-          ) : null}
         </div>
       ) : null}
     </div>
+
   );
 }
 
