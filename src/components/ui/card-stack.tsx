@@ -252,8 +252,8 @@ export function CardStack<T extends CardStackItem>({
               if (!visible) return null;
 
               // fan geometry
-              const rotateZ = off * (isMobile ? stepDeg * 0.6 : stepDeg);
-              const x = off * (isMobile ? cardSpacing * 0.7 : cardSpacing);
+              const rotateZ = off * (isMobile ? stepDeg * 0.4 : stepDeg);
+              const x = off * (isMobile ? cardSpacing * 0.5 : cardSpacing);
               const y = abs * (isMobile ? 5 : 10); // subtle arc-down feel
               const z = -abs * depthPx;
 

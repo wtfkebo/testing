@@ -34,7 +34,8 @@ const works = [
 
 const Works = () => {
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen overflow-x-hidden">
+
       <section className="pt-32 pb-20 px-6 max-w-7xl mx-auto text-center">
         <FadeUp>
           <h1 className="text-5xl md:text-7xl font-heading font-medium tracking-tight mb-8 text-balance">
