@@ -2,6 +2,8 @@ import { useState } from 'react';
 import FadeUp from '../components/ui/FadeUp';
 import Button from '../components/ui/Button';
 import { Check, X } from 'lucide-react';
+import { GlowingEffect } from "../components/ui/glowing-effect";
+
 
 const Pricing = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -146,40 +148,51 @@ const Pricing = () => {
                   ? 'bg-primary text-surface border-primary shadow-2xl scale-105 z-10' 
                   : 'bg-surface text-primary border-primary/10'
                 }`}>
-                  {plan.highlight && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-surface px-4 py-1 text-sm font-medium rounded-full">
-                      Recommended
+                  <GlowingEffect
+                    spread={40}
+                    glow={true}
+                    disabled={false}
+                    proximity={64}
+                    inactiveZone={0.01}
+                    borderWidth={3}
+                  />
+                  <div className="relative z-10 flex flex-col h-full">
+                    {plan.highlight && (
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-surface px-4 py-1 text-sm font-medium rounded-full">
+                        Recommended
+                      </div>
+                    )}
+                    
+                    <div className="mb-8">
+                      <h3 className={`text-2xl font-heading font-medium mb-4 ${plan.highlight ? 'text-surface' : 'text-primary'}`}>{plan.name}</h3>
+                      <div className="flex items-baseline gap-2 mb-4">
+                        <span className="text-4xl font-heading font-semibold">{plan.price}</span>
+                      </div>
+                      <p className={`text-sm leading-relaxed ${plan.highlight ? 'text-surface/70' : 'text-primary/60'}`}>
+                        {plan.desc}
+                      </p>
                     </div>
-                  )}
-                  
-                  <div className="mb-8">
-                    <h3 className={`text-2xl font-heading font-medium mb-4 ${plan.highlight ? 'text-surface' : 'text-primary'}`}>{plan.name}</h3>
-                    <div className="flex items-baseline gap-2 mb-4">
-                      <span className="text-4xl font-heading font-semibold">{plan.price}</span>
+
+                    <div className="grow mb-10">
+                      <ul className="flex flex-col gap-4">
+                        {plan.features.map((feature, fIdx) => (
+                          <li key={fIdx} className="flex items-start gap-3 text-sm">
+                            <Check className={`w-5 h-5 shrink-0 ${plan.highlight ? 'text-surface/80' : 'text-primary/70'}`} />
+                            <span className={plan.highlight ? 'text-surface/80' : 'text-primary/80'}>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <p className={`text-sm leading-relaxed ${plan.highlight ? 'text-surface/70' : 'text-primary/60'}`}>
-                      {plan.desc}
-                    </p>
+
+                    <Button 
+                      onClick={() => handleSelectPlan(plan)} 
+                      variant={plan.highlight ? "accent" : "secondary"} 
+                      className="w-full"
+                    >
+                      Select
+                    </Button>
                   </div>
 
-                  <div className="grow mb-10">
-                    <ul className="flex flex-col gap-4">
-                      {plan.features.map((feature, fIdx) => (
-                        <li key={fIdx} className="flex items-start gap-3 text-sm">
-                          <Check className={`w-5 h-5 shrink-0 ${plan.highlight ? 'text-surface/80' : 'text-primary/70'}`} />
-                          <span className={plan.highlight ? 'text-surface/80' : 'text-primary/80'}>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <Button 
-                    onClick={() => handleSelectPlan(plan)} 
-                    variant={plan.highlight ? "accent" : "secondary"} 
-                    className="w-full"
-                  >
-                    Select
-                  </Button>
                 </div>
              </FadeUp>
           ))}

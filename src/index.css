@@ -9,7 +9,15 @@
   --color-bg-base: var(--bg-base);
   --color-bg-sec: var(--bg-sec);
   --color-bg-tert: var(--bg-tert);
+
+  /* Shadcn-like mappings */
+  --color-background: var(--bg-base);
+  --color-foreground: var(--primary);
+  --color-muted: var(--bg-sec);
+  --color-muted-foreground: #6b7280;
+  --color-border: rgba(0, 0, 0, 0.1);
 }
+
 
 @layer base {
   :root {
