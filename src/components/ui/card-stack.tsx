@@ -51,6 +51,8 @@ export type CardStackProps<T extends CardStackItem> = {
   /** Motion */
   springStiffness?: number;
   springDamping?: number;
+  mass?: number;
+
 
   /** Behavior */
   loop?: boolean;
@@ -103,8 +105,15 @@ export function CardStack<T extends CardStackItem>({
   activeScale = 1.03,
   inactiveScale = 0.94,
 
-  springStiffness = 280,
-  springDamping = 28,
+  springStiffness = 300,
+  springDamping = 30,
+  mass = 0.4,
+
+
+
+
+
+
 
   loop = true,
   autoAdvance = false,
@@ -234,13 +243,14 @@ export function CardStack<T extends CardStackItem>({
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
-      {/* Stage */}
       <div
         className="relative w-full"
         style={{ height: cardHeight + (isMobile ? 30 : 60) }}
+
         tabIndex={0}
         onKeyDown={onKeyDown}
       >
+
         {/* background wash / spotlight (unique feel) */}
         <div
           className="pointer-events-none absolute inset-x-0 top-6 mx-auto h-48 w-[70%] rounded-full bg-black/5 blur-3xl dark:bg-white/5"
@@ -307,11 +317,14 @@ export function CardStack<T extends CardStackItem>({
                 <motion.div
                   key={item.id}
                   className={cn(
+
+
                     "absolute bottom-0 rounded-2xl border-4 border-black/10 dark:border-white/10 overflow-hidden shadow-xl",
                     "will-change-transform select-none",
                     isActive
-                      ? "cursor-pointer active:scale-95 transition-transform"
+                      ? "cursor-pointer"
                       : "cursor-pointer transition-opacity duration-300",
+
                     !isActive && "opacity-60 hover:opacity-100",
                   )}
                   style={{
@@ -340,11 +353,19 @@ export function CardStack<T extends CardStackItem>({
                     rotateX,
                     scale,
                   }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.8,
+                    transition: { duration: 0.3 }
+                  }}
                   transition={{
                     type: "spring",
                     stiffness: springStiffness,
                     damping: springDamping,
+                    mass,
                   }}
+
+
                   onClick={() => onCardClick(i, item)}
                   {...dragProps}
                 >
