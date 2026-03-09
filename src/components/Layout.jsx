@@ -4,7 +4,8 @@ import CookieBanner from './CookieBanner';
 
 const Layout = ({ children }) => {
   return (
-    <div className="flex flex-col min-h-screen relative">
+    <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+
       <Navbar />
       <main className="grow pt-24 pb-12">
         {children}
